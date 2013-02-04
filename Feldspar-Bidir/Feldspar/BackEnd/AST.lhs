@@ -8,20 +8,25 @@
 > module Feldspar.BackEnd.AST where
 
 > data Types = TInt32 | TBool
+>  deriving Eq
 
 > type Var = (String,Types)
 
-> data Func = Func String [Var] [Stmt]  
+> data Func ann = 
+>    Func String [Var] [Stmt ann]  
 
-> data Stmt = 
->    If_C Exp_C [Stmt] [Stmt]
->  | Assign String Exp_C
+> data Stmt ann = 
+>    If_C (Exp_C ann) [Stmt ann] [Stmt ann]
+>  | Assign String (Exp_C ann)
 >  | Declare Types String
-  
-> data Exp_C = 
+>  | Ann_Stmt ann (Stmt ann)
+>  deriving Eq
+
+> data Exp_C ann = 
 >    Var_C String
 >  | Num Int
->  | Infix Exp_C String Exp_C
->  | Unary String Exp_C
+>  | Infix (Exp_C ann) String (Exp_C ann)
+>  | Unary String (Exp_C ann)
+>  | Ann_Exp_C ann (Exp_C ann)
 >  deriving Eq
 

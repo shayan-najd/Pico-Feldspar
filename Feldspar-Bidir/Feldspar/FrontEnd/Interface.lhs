@@ -10,7 +10,7 @@
 
 > import Feldspar.FrontEnd.AST
 
-> instance Num (Data Int32) where
+> instance Num (Data Int32 ann) where
 >  fromInteger i = Lit_Int $ fromInteger i
 >  (+) = Add
 >  (-) = Sub
@@ -20,36 +20,43 @@
 >                       (condition (x == 0) 0 1) 
 >  abs x = (signum x) * x
 
-> (==) :: Data Int32 -> Data Int32 -> Data Bool
+> (==) :: forall ann. Data Int32 ann -> Data Int32 ann -> 
+>         Data Bool ann
 > (==)      = Eq_Int 
 
-> (<)  :: Data Int32 -> Data Int32 -> Data Bool
+> (<)  :: forall ann. Data Int32 ann -> Data Int32 ann ->
+>         Data Bool ann
 > (<)       = LT_Int
 
-> (>) :: Data Int32 -> Data Int32 -> Data Bool
+> (>)  :: forall ann. Data Int32 ann -> Data Int32 ann -> 
+>         Data Bool ann
 > e_1 > e_2 = not $ e_1 < e_2
 
-> (<=) :: Data Int32 -> Data Int32 -> Data Bool
+> (<=) :: forall ann. Data Int32 ann -> Data Int32 ann ->
+>         Data Bool ann
 > e_1 <= e_2 = (e_1 < e_2) && (e_1 == e_2)
 
-> (>=) :: Data Int32 -> Data Int32 -> Data Bool
+> (>=) :: forall ann. Data Int32 ann -> Data Int32 ann ->
+>         Data Bool ann
 > e_1 >= e_2 = (e_1 > e_2) && (e_1 == e_2)
 
-> true :: Data Bool
+> true :: forall ann. Data Bool ann
 > true = Lit_Bool True  
 
-> false :: Data Bool
+> false :: forall ann. Data Bool ann
 > false = Lit_Bool False
 
-> not :: Data Bool -> Data Bool
+> not :: forall ann. Data Bool ann -> Data Bool ann
 > not = Not
 
-> (&&) :: Data Bool -> Data Bool -> Data Bool
+> (&&) :: forall ann. Data Bool ann -> Data Bool ann -> 
+>         Data Bool ann
 > (&&) = And
 
-> (||) :: Data Bool -> Data Bool -> Data Bool
+> (||) :: forall ann. Data Bool ann -> Data Bool ann -> 
+>         Data Bool ann
 > x || y = not ((not x) && (not y))
 
-> condition :: forall a. Data Bool -> Data a -> 
->              Data a -> Data a
+> condition :: forall a ann. Data Bool ann -> Data a ann -> 
+>              Data a ann -> Data a ann
 > condition = If

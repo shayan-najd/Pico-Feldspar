@@ -11,15 +11,17 @@
 > {-# LANGUAGE GADTs #-} 
 > {-# LANGUAGE TypeSynonymInstances #-}
 > {-# LANGUAGE FlexibleInstances #-}
+> {-# LANGUAGE FlexibleContexts #-}
 
-> module Feldspar.Compiler (scompile,icompile,IO) where
+> module Feldspar.Compiler.Compiler where
 
 > import Feldspar.FrontEnd.AST 
 > import Feldspar.BackEnd.AST
 > import Feldspar.BackEnd.Pretty
+> import Feldspar.Annotations
 
 > class GetType a where
->   getType :: Data a -> Types
+>   getType :: Data a ann -> Types
 
 > instance GetType Int32 where
 >   getType _ = TInt32 
@@ -27,8 +29,8 @@
 > instance GetType Bool where
 >   getType _ = TBool
 
-> compileD :: GetType a => Int -> Data a -> 
->            (Int,(Exp_C,Types,[Stmt]))
+> compileD :: GetType a => Int -> Data a ann -> 
+>            (Int,(Exp_C ann,Types,[Stmt ann]))
 > compileD i e@(Var v)            = 
 >    (i,(Var_C v      , getType e ,[]))
 > compileD i e@(Lit_Int x)        =   
@@ -87,14 +89,15 @@
 >                ++ [Declare (getType e) v
 >                   ,If_C e_c_1 
 >                       (st_2 ++ [Assign v e_c_2])
->                       (st_3 ++ [Assign v e_c_3])]))     
+>                       (st_3 ++ [Assign v e_c_3])]))
+> compileD i e = preserve e (compileD i)       
 
-> class Compilable t where
+> class Inj t => Compilable t where
 >  compile :: [Var] -> Int -> t ->
->             ([Var],(Int,(Exp_C,Types,[Stmt])))
+>             ([Var],(Int,(Exp_C (Ann t) ,Types,[Stmt (Ann t)])))
   
-> instance (GetType a ,Compilable r) => 
->          Compilable (Data a -> r) where
+> instance (GetType a ,Compilable r,Inj r,Ann r ~ ann) => 
+>          Compilable (Data a ann -> r) where
 >  compile ps i f = let
 >   v = "v" ++ (show i)
 >   a = Var v  
@@ -102,18 +105,19 @@
 >   in compile (ps ++ [(v,getType a)]) (i+1) r
 
 > instance GetType a => 
->          Compilable (Data a) where
+>          Compilable (Data a ann) where
 >  compile ps i d = (ps,compileD i d)
- 
-> toFunc :: ([Var],(Int,(Exp_C,Types,[Stmt]))) ->
->                    Func
+
+> toFunc :: ([Var],(Int,(Exp_C ann,Types,[Stmt ann]))) ->
+>                    Func ann
 > toFunc (ps,(_,(exp_C,ty,stmts))) = 
 >  Func "test" (ps ++ [("*out",ty)])  
 >  (stmts ++ [Assign "*out" exp_C])
 
-> scompile :: Compilable a => a -> String 
+> scompile :: (Inj a, Compilable a,Pretty (Ann a)) =>
+>             a -> String  
 > scompile = show . pretty . toFunc . (compile [] 0)
 
-> icompile :: Compilable a => a -> IO ()
-> icompile = putStrLn .scompile
- 
+> icompile :: (Inj a,Compilable a,Pretty (Ann a)) => 
+>             a -> IO ()
+> icompile = putStrLn . scompile
