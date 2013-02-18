@@ -1,0 +1,90 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{ae}
+\usepackage{icomma}
+\usepackage{units}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{subfigure}
+\usepackage{bbm}
+\usepackage{caption}
+\usepackage[square, numbers, sort]{natbib}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{fncychap}
+\usepackage[hyphens]{url}
+\usepackage[breaklinks,pdfpagelabels=false]{hyperref}
+\usepackage{lettrine}
+\usepackage{eso-pic}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{verbatim}
+\usepackage{listings}
+
+\newcommand{\rd}{\ensuremath{\mathrm{d}}}
+\newcommand{\id}{\ensuremath{\,\rd}}
+\newcommand{\degC}{\ensuremath{\,\unit{^\circ C}}}
+
+% Fancyheader shortcuts
+\newcommand{\setdefaulthdr}{%
+\fancyhead[L]{\slshape \rightmark}%
+%\fancyhead[R]{\slshape \leftmark}%
+\fancyhead[R]{}
+\fancyfoot[C]{\thepage}%
+}
+\newcommand{\setspecialhdr}{%
+\fancyhead[L]{ }%
+\fancyhead[R]{\slshape \leftmark}%
+\fancyfoot[C]{\thepage}%
+}
+
+\newcommand{\mail}[1]{\href{mailto:#1}{\nolinkurl{#1}}}
+\newcommand{\backgroundpic}[3]{%
+	\put(#1,#2){
+		\parbox[b][\paperheight]{\paperwidth}{%
+			\centering
+			\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{#3}
+			\vfill
+}}}
+ 
+
+% Dropping initial letter color
+\renewcommand{\LettrineFontHook}{\color[gray]{0.5}}
+ 
+% Single page abstract
+\renewenvironment{abstract}%
+{\begin{center} \bfseries \abstractname \end{center}}%
+{\vspace{2\baselineskip}}%
+
+% Figure & Table captions
+\captionsetup{margin=10pt,font=small,labelfont=bf}
+\captionsetup[table]{position=top}
+\setlength{\extrarowheight}{4pt}
+\addtolength{\headheight}{\baselineskip}
+
+\pagestyle{fancy}
+\setdefaulthdr
+
+% Stolen settings (unknown origin):
+% Alter some LaTeX defaults for better treatment of figures:
+% See p.105 of "TeX Unbound" for suggested values.
+% See pp. 199-200 of Lamport's "LaTeX" book for details.
+%   General parameters, for ALL pages:
+\renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+%   Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}     % 2 may work better
+\setcounter{dbltopnumber}{2}    % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}	% fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+%   Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}	% require fuller float pages
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}	% require fuller float pages
+% remember to use [htp] or [htpb] for placement

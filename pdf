@@ -1,0 +1,17 @@
+./clean
+echo -------------------------------------------------------------------
+clear
+lhs2TeX -o PicoFeldspar.tex PicoFeldspar.lhs
+pdflatex -interaction=batchmode PicoFeldspar.tex
+bibtex PicoFeldspar.aux 
+echo -------------------------------------------------------------------
+clear
+pdflatex -interaction=batchmode PicoFeldspar.tex
+echo -------------------------------------------------------------------
+clear
+pdflatex -interaction=batchmode PicoFeldspar.tex
+echo -------------------------------------------------------------------
+clear
+pdflatex PicoFeldspar.tex
+echo -------------------------------------------------------------------
+./clean

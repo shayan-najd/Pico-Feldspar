@@ -1,0 +1,17 @@
+rm *.tex
+rm *.aux
+rm *.bbl
+rm *.blg
+rm *.log
+rm *.out 
+rm *.ptb
+rm *.lof
+rm *.lot
+rm *.toc
+rm *~
+rm Pico-Feldspar/*~
+rm Pico-Feldspar/Feldspar/*~
+rm Pico-Feldspar/Feldspar/Compiler/*~
+rm Pico-Feldspar/Feldspar/FrontEnd/*~
+rm Pico-Feldspar/Feldspar/BackEnd/*~
+rm Pico-Feldspar/Examples/*~
